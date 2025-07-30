@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Student Form</title>
+</h:head>
+<h:body>
+<h:form id="form">
+    <p:panel header="Student Form">
+        <h:panelGrid columns="2">
+            <h:outputLabel value="Name:"/>
+            <p:inputText value="#{studentBean.student.name}" />
+
+            <h:outputLabel value="Address:"/>
+            <p:inputText value="#{studentBean.student.address}" />
+
+            <h:outputLabel value="Class:"/>
+            <p:selectOneMenu value="#{studentBean.student.studentClass}" onchange="submit()">
+                <f:selectItem itemLabel="Select Class" itemValue="" />
+                <f:selectItems value="#{studentBean.classSubjects.keySet()}" />
+            </p:selectOneMenu>
+
+            <h:outputLabel value="Subject:"/>
+            <p:selectOneMenu value="#{studentBean.student.subject}">
+                <f:selectItems value="#{studentBean.subjectList}" />
+            </p:selectOneMenu>
+        </h:panelGrid>
+
+        <p:commandButton value="Save" action="#{studentBean.saveStudent}" update="@form"/>
+    </p:panel>
+
+    <p:dataTable value="#{studentBean.studentList}" var="stu">
+        <p:column headerText="Name">#{stu.name}</p:column>
+        <p:column headerText="Address">#{stu.address}</p:column>
+        <p:column headerText="Class">#{stu.studentClass}</p:column>
+        <p:column headerText="Subject">#{stu.subject}</p:column>
+        <p:column headerText="Actions">
+            <p:commandButton value="Edit" oncomplete="PF('editDialog').show()" 
+                             actionListener="#{studentBean.editStudent(stu)}" 
+                             update=":editForm"/>
+            <p:commandButton value="Delete" action="#{studentBean.deleteStudent(stu)}" update="@form"/>
+        </p:column>
+    </p:dataTable>
+</h:form>
+
+<p:dialog header="Edit Student" widgetVar="editDialog" modal="true">
+    <h:form id="editForm">
+        <h:panelGrid columns="2">
+            <h:outputLabel value="Name:"/>
+            <p:inputText value="#{studentBean.student.name}" />
+
+            <h:outputLabel value="Address:"/>
+            <p:inputText value="#{studentBean.student.address}" />
+
+            <h:outputLabel value="Class:"/>
+            <p:inputText value="#{studentBean.student.studentClass}" />
+
+            <h:outputLabel value="Subject:"/>
+            <p:inputText value="#{studentBean.student.subject}" />
+        </h:panelGrid>
+        <p:commandButton value="Update" action="#{studentBean.saveStudent}" update=":form" oncomplete="PF('editDialog').hide()" />
+    </h:form>
+</p:dialog>
+
+</h:body>
+</html>
+
